@@ -1,0 +1,61 @@
+.h5_uploads::after{
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.h5_uploads { zoom: 1; }
+
+.h5_uploads .up_selector{
+    float: left;
+    width:80px;
+    height:80px; margin:5px;
+    cursor: pointer;
+    font-size:40px;
+    background:#fff;
+    color:gray;
+    line-height:80px;
+    text-align:center;
+    border:1px solid #ccc;
+}
+
+.h5_uploads .up_list{
+    display: inline;
+}
+
+.h5_uploads .up_item{
+    width:80px; height: 80px;
+    margin:5px; overflow: hidden;;
+    position: relative;
+    float: left;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+.h5_uploads .up_item a{
+    color:#fff;
+    position: absolute;
+    top:-3px; right: -3px;
+    background: #000;
+    opacity: 0.8;
+    cursor: pointer;
+    font-size: 12px;
+    padding:0 4px;
+    line-height:16px;
+}
+.h5_uploads .up_item progress{
+    width:100%;
+    margin-top:5px;
+    position: absolute;
+    bottom: 0;
+    left:0;
+    opacity: 0.5;
+    display: none;
+}
+.h5_uploads .up_item img{
+    max-width:100%;
+    cursor: pointer;
+}

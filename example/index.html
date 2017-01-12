@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Html5上传</title>
+    <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="../dist/bundle.js"></script>
+
+<div id="test"></div>
+<script>
+    var imgs = new H5ImgUploader('test', [], $("#test"), {
+        mime : 'image/jpg',
+        upload : '/upload.php'
+    });
+    imgs.init();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+### JetBrains template
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
+
+*.iml
+composer.lock
+*.phar
+*.log
+*.bak
+*.pid
+*.txt
+
+## Directory-based project format:
+.idea/
+vendor/
+
