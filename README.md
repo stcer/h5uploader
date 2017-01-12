@@ -19,7 +19,7 @@
 <div id="test"></div>
 
 <script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script src="../dist/bundle.js"></script>
+<script src="../dist/h5uploader.js"></script>
 <script>
     var imgs = new H5ImgUploader('test', [], $("#test"), {
         mime : 'image/jpg',
