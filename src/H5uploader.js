@@ -14,7 +14,7 @@ let F = function (name, images, container, options) {
 
     this.opts = $.extend({
         mul: false,
-        setCoverField: true,
+        setCoverField: false,
         coverFieldName: 'image',
 
         // render
@@ -57,18 +57,18 @@ F.prototype = {
             ''));
         this.list = $('.up_list', this.container);
 
+        let that = this;
         let currentImage = false;
         if (this.images) {
             this.images.forEach(function(src){
                 if(src.length == 0){
                     return;
                 }
-                let _img = currentImage = this.createImage(src);
+                let _img = currentImage = that.createImage(src);
                 _img.setValue(src);
             });
         }
 
-        let that = this;
         $('.up_selector', this.container).click(function () {
             let replace = that.list.find('.up_item').size() > 0 && that.opts.mul == false;
             if (replace) {
