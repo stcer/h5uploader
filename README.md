@@ -53,7 +53,6 @@ transData | object | {} | 上传附属数据
 onUpload | function | null | 文件上传成功callback
 onSend | function | null | 文件上传前callback
 
-
 ## 执行流程
 
 1.  初始化dom容器, 包括input_file, file_list

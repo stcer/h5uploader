@@ -121,6 +121,7 @@ F.prototype = {
             },
 
             onSuccess: function (xhr) {
+                console.log(xhr.responseText);
                 let response = eval("(" + xhr.responseText + ")");
                 if (response.code == 200) {
                     progress.val(100);

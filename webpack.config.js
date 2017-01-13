@@ -37,6 +37,8 @@ module.exports = {
         console : 'window.console'
     },
 
+    devtool : "source-map",
+
     plugins: [
         new webpack.optimize.UglifyJsPlugin({
             compress: {

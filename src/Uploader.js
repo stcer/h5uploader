@@ -32,7 +32,7 @@ export default function (url, image, options) {
         }, false
     );
 
-    xhr.onReadyStateChange = function (e) {
+    xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 // trigger event success
