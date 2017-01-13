@@ -1,8 +1,9 @@
 // main class
 import ImgPicker from "./ImgPicker.js";
-import ImgRender from "./ImgRender.js";
+import imgEditor from "./ImgEditor.js";
 import uploadFile from "./Uploader.js";
 import Img from "./Img.js";
+
 // main class
 let F = function (name, images, container, options) {
     this.name = name;
@@ -19,13 +20,13 @@ let F = function (name, images, container, options) {
         // render
         mime: 'image/*',
         type: /image.(png|jpeg|gif|jpg)/,
-        width: 600,
-        quality: 0.6,
-        size: 1024 * 1024 * 4,
+        maxSize: 1024 * 1024 * 4,
 
+        // _upload
         loading: 'http://ui.jc001.cn/images/loading.gif',
         upload: '/index.php?_a=upload',
         fileName: 'media',
+        dataFormat : 'file',
         transData: {},
         onUpload: function (src) {
         },
@@ -40,9 +41,10 @@ let F = function (name, images, container, options) {
         mime : this.opts.mime
     });
 
-    this.imgRender = new ImgRender({
-        width: this.opts.width,
-        quality: this.opts.quality
+    this.imgEditor = new imgEditor({
+        maxWidth: this.opts.maxWidth,
+        quality: this.opts.quality,
+        dataFormat : this.opts.dataFormat
     });
 };
 
@@ -57,13 +59,13 @@ F.prototype = {
 
         let currentImage = false;
         if (this.images) {
-            for (let i in this.images) {
-                if (this.images[i].length == 0) {
-                    continue;
+            this.images.forEach(function(src){
+                if(src.length == 0){
+                    return;
                 }
-                let _img = currentImage = this.createImage(this.images[i]);
-                _img.setValue(this.images[i]);
-            }
+                let _img = currentImage = this.createImage(src);
+                _img.setValue(src);
+            });
         }
 
         let that = this;
@@ -75,9 +77,8 @@ F.prototype = {
 
             that.imgPicker.select(function (file) {
                 let img = that.createImage(that.opts.loading);
-                that.render(file, img);
+                that._render(file, img);
             });
-
             //
             // let img;
             // that.imgPicker.select(function(file){
@@ -95,30 +96,40 @@ F.prototype = {
         return this.list.has('.up_item').size() == 0 || this.opts.mul == true;
     },
 
-    render: function (file, img) {
+    _render: function (file, img) {
         let that = this;
-        this.imgRender.getResult(file, function (dataBase64, file) {
-            img.setUrl(dataBase64);
-            that.upload(dataBase64, file, img);
-        });
+        if((this.opts.maxWidth || this.opts.opacity)){
+            this.imgEditor.getResult(file, function (fileData, file) {
+                img.setUrl(that.opts.dataFormat == 'base64'? fileData : URL.createObjectURL(fileData));
+                that._upload(fileData, file, img);
+            });
+        } else {
+            img.setUrl(URL.createObjectURL(file));
+            that._upload(file, file, img);
+        }
     },
 
-    upload: function (data, file, img) {
-        let progress = img.progress;
-
-        //let prefix = 'data:' + file.type + ";base64,";
-        data = data.substr(data.indexOf(',') + 1);
+    _upload: function (data, file, img) {
         let self = this;
+        let progress = img.progress;
+        //let prefix = 'data:' + file.type + ";base64,";
+        data = this.opts.dataFormat == 'base64d' ? data.substr(data.indexOf(',') + 1)  : data;
+
         uploadFile(this.opts.upload, data, {
-            fileName: this.opts.fileName,
+            fieldName : this.opts.fileName,
+            fileName: file.name,
+            format : self.opts.dataFormat,
             transData: self.opts.transData,
+
             onInit: function () {
                 progress.show();
                 progress.val(0);
             },
+
             onProgress: function (loaded, total) {
                 progress.val((loaded / total) * 100);
             },
+
             onSuccess: function (xhr) {
                 let response = eval("(" + xhr.responseText + ")");
                 if (response.code == 200) {
@@ -127,14 +138,16 @@ F.prototype = {
                     img.setValue(response.data.url);
                     self.opts.onUpload(response.data.url);
                 } else {
-                    alert('上传失败, 原因：' + response.message);
+                    alert('上传失败, ' + response.message);
                     img.remove();
                 }
             },
+
             onError: function (xhr) {
                 alert('上传失败(' + xhr.status + ')');
                 img.remove();
             },
+
             onSend: function (formData) {
                 self.opts.onSend(formData);
             }
@@ -158,19 +171,17 @@ F.prototype = {
 
         img.image.click(function () {
             that.imgPicker.select(function (file) {
-                that.render(file, img);
+                that._render(file, img);
             });
         });
 
         img.deleteImg.click(function () {
             img.remove();
-
             if (that.isSetCover
                 && $('input[name=' + that.opts.coverFieldName + ']', that.list).size() == 0) {
                 let item = $('>:first-child', that.list);
                 $('input[type=hidden]', item).attr('name', that.opts.coverFieldName);
             }
-
             event.stopPropagation();
         });
 

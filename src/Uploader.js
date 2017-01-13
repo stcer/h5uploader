@@ -49,8 +49,8 @@ export default function (url, image, options) {
     xhr.open(opts.method, url, true);
 
     let formData = new FormData();
-    formData.append(opts.fileName, image);
-    formData.append('format', 'base64');
+    formData.append(opts.fieldName, image, opts.fileName);
+    formData.append('uploadFormat', opts.format);
     for (let prop in opts.transData) {
         if (opts.transData.hasOwnProperty(prop)) {
             formData.append(prop, opts.transData[prop]);

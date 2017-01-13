@@ -1,7 +1,7 @@
 var webpack = require('webpack')
 
 module.exports = {
-    entry: './src/entry.js',
+    entry: './index.js',
 
     output: {
         path: __dirname + '/dist',
@@ -32,6 +32,8 @@ module.exports = {
     externals: {
         jquery: 'window.$',
         navigator : 'window.navigator',
-        webkitURL : 'window.webkitURL'
+        webkitURL : 'window.webkitURL',
+        URL : 'window.URL',
+        console : 'window.console'
     }
 };

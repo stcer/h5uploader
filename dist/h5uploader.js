@@ -110,7 +110,7 @@
 	        size: 1024 * 1024 * 4,
 
 	        loading: 'http://ui.jc001.cn/images/loading.gif',
-	        upload: '/index.php?_a=upload',
+	        _upload: '/index.php?_a=_upload',
 	        fileName: 'media',
 	        transData: {},
 	        onUpload: function onUpload(src) {},
@@ -125,7 +125,7 @@
 	    });
 
 	    this.imgRender = new _ImgRender2.default({
-	        width: this.opts.width,
+	        width: this.opts.maxWidth,
 	        quality: this.opts.quality
 	    });
 	};
@@ -169,16 +169,16 @@
 	        var that = this;
 	        this.imgRender.getResult(file, function (dataBase64, file) {
 	            img.setUrl(dataBase64);
-	            that.upload(dataBase64, file, img);
+	            that._upload(dataBase64, file, img);
 	        });
 	    },
 
-	    upload: function upload(data, file, img) {
+	    _upload: function upload(data, file, img) {
 	        var progress = img.progress;
 
 	        data = data.substr(data.indexOf(',') + 1);
 	        var self = this;
-	        (0, _Uploader2.default)(this.opts.upload, data, {
+	        (0, _Uploader2.default)(this.opts._upload, data, {
 	            fileName: this.opts.fileName,
 	            transData: self.opts.transData,
 	            onInit: function onInit() {
@@ -269,7 +269,7 @@
 
 	ImgPicker.prototype = {
 	    init: function init(container) {
-	        var input = $('<input type="file" style="width:0; height:0;" ' + (this.opts.mul ? 'multiple' : '') + ' accept="' + this.opts.mime + '">');
+	        var input = $('<input type="file" style="maxWidth:0; height:0;" ' + (this.opts.mul ? 'multiple' : '') + ' accept="' + this.opts.mime + '">');
 	        container.prepend(input);
 
 	        var that = this;
@@ -327,7 +327,7 @@
 
 	var ImgRender = function ImgRender(options) {
 	    this.opts = $.extend({
-	        width: 500,
+	        maxWidth: 500,
 	        quality: 0.2
 	    }, options);
 	};
@@ -343,12 +343,12 @@
 	    },
 
 	    compress: function compress(url, file, callback) {
-	        var maxWidth = this.opts.width,
+	        var maxWidth = this.opts.maxWidth,
 	            quality = this.opts.quality;
 
 	        var img = new Image();
 	        img.addEventListener("load", function () {
-	            var width = img.width,
+	            var width = img.maxWidth,
 	                height = img.height,
 	                scale = width / height;
 	            if (width > maxWidth) {
@@ -358,20 +358,20 @@
 
 	            var canvas = document.createElement('canvas');
 	            var ctx = canvas.getContext('2d');
-	            canvas.width = width;
+	            canvas.maxWidth = width;
 	            canvas.height = height;
 
 	            ctx.drawImage(img, 0, 0, width, height);
 	            var base64 = void 0;
 	            if (_base.isAndroid) {
-	                var tmp = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	                var tmp = ctx.getImageData(0, 0, canvas.maxWidth, canvas.height);
 	                quality = quality * 100;
 	                var encoder = new _JPEGEncoder2.default(quality);
 	                base64 = encoder.encode(tmp, quality);
 	            } else {
 	                base64 = canvas.toDataURL(file.type, quality);
 	            }
-	            canvas.width = 0;
+	            canvas.maxWidth = 0;
 	            canvas.height = 0;
 	            canvas = null;
 
@@ -869,7 +869,7 @@
 	        writeWord(0xFFD8);
 	        writeAPP0();
 	        writeDQT();
-	        writeSOF0(image.width, image.height);
+	        writeSOF0(image.maxWidth, image.height);
 	        writeDHT();
 	        writeSOS();
 
@@ -883,7 +883,7 @@
 	        this.encode.displayName = "_encode_";
 
 	        var imageData = image.data;
-	        var width = image.width;
+	        var width = image.maxWidth;
 	        var height = image.height;
 
 	        var quadWidth = width * 4;
@@ -1126,7 +1126,7 @@
 
 
 	// module
-	exports.push([module.id, ".h5_uploads::after{\r\n    content: \".\";\r\n    display: block;\r\n    height: 0;\r\n    clear: both;\r\n    visibility: hidden;\r\n}\r\n.h5_uploads { zoom: 1; }\r\n\r\n.h5_uploads .up_selector{\r\n    float: left;\r\n    width:80px;\r\n    height:80px; margin:5px;\r\n    cursor: pointer;\r\n    font-size:40px;\r\n    background:#fff;\r\n    color:gray;\r\n    line-height:80px;\r\n    text-align:center;\r\n    border:1px solid #ccc;\r\n}\r\n\r\n.h5_uploads .up_list{\r\n    display: inline;\r\n}\r\n\r\n.h5_uploads .up_item{\r\n    width:80px; height: 80px;\r\n    margin:5px; overflow: hidden;;\r\n    position: relative;\r\n    float: left;\r\n    display: flex;\r\n    flex-flow: row wrap;\r\n    align-items: center;\r\n    justify-content: center;\r\n    vertical-align: middle;\r\n}\r\n.h5_uploads .up_item a{\r\n    color:#fff;\r\n    position: absolute;\r\n    top:-3px; right: -3px;\r\n    background: #000;\r\n    opacity: 0.8;\r\n    cursor: pointer;\r\n    font-size: 12px;\r\n    padding:0 4px;\r\n    line-height:16px;\r\n}\r\n.h5_uploads .up_item progress{\r\n    width:100%;\r\n    margin-top:5px;\r\n    position: absolute;\r\n    bottom: 0;\r\n    left:0;\r\n    opacity: 0.5;\r\n    display: none;\r\n}\r\n.h5_uploads .up_item img{\r\n    max-width:100%;\r\n    cursor: pointer;\r\n}", ""]);
+	exports.push([module.id, ".h5_uploads::after{\r\n    content: \".\";\r\n    display: block;\r\n    height: 0;\r\n    clear: both;\r\n    visibility: hidden;\r\n}\r\n.h5_uploads { zoom: 1; }\r\n\r\n.h5_uploads .up_selector{\r\n    float: left;\r\n    maxWidth:80px;\r\n    height:80px; margin:5px;\r\n    cursor: pointer;\r\n    font-size:40px;\r\n    background:#fff;\r\n    color:gray;\r\n    line-height:80px;\r\n    text-align:center;\r\n    border:1px solid #ccc;\r\n}\r\n\r\n.h5_uploads .up_list{\r\n    display: inline;\r\n}\r\n\r\n.h5_uploads .up_item{\r\n    maxWidth:80px; height: 80px;\r\n    margin:5px; overflow: hidden;;\r\n    position: relative;\r\n    float: left;\r\n    display: flex;\r\n    flex-flow: row wrap;\r\n    align-items: center;\r\n    justify-content: center;\r\n    vertical-align: middle;\r\n}\r\n.h5_uploads .up_item a{\r\n    color:#fff;\r\n    position: absolute;\r\n    top:-3px; right: -3px;\r\n    background: #000;\r\n    opacity: 0.8;\r\n    cursor: pointer;\r\n    font-size: 12px;\r\n    padding:0 4px;\r\n    line-height:16px;\r\n}\r\n.h5_uploads .up_item progress{\r\n    maxWidth:100%;\r\n    margin-top:5px;\r\n    position: absolute;\r\n    bottom: 0;\r\n    left:0;\r\n    opacity: 0.5;\r\n    display: none;\r\n}\r\n.h5_uploads .up_item img{\r\n    max-maxWidth:100%;\r\n    cursor: pointer;\r\n}", ""]);
 
 	// exports
 
