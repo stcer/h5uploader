@@ -24,7 +24,7 @@ let F = function (name, images, container, options) {
 
         // _upload
         loading: 'http://ui.jc001.cn/images/loading.gif',
-        upload: '/index.php?_a=upload',
+        upload: '/upload/save',
         fileName: 'media',
         dataFormat : 'file',
         transData: {},
