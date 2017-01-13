@@ -38,6 +38,8 @@
 ## Options
 name | type | default | description
 ------|-----|---------|----
+maxWidth | int | 0 | 允许图像文件的最大宽度, 超过此宽度，将被压缩到maxWidth后上传, 0不限制
+quality | int | null | 图像质量 取值0.0-1.0之间, 不设置将不压缩
 mul | bool | false | 是否允许多图上传
 setCoverField | bool | true | 多图上传时允许封面图像
 coverFieldName | string | image | 封面图像隐藏域name
