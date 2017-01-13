@@ -32,7 +32,6 @@ export default function (url, image, options) {
         }, false
     );
 
-    // 文件上传成功或是失败
     xhr.onReadyStateChange = function (e) {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {

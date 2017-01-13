@@ -79,16 +79,6 @@ F.prototype = {
                 let img = that.createImage(that.opts.loading);
                 that._render(file, img);
             });
-            //
-            // let img;
-            // that.imgPicker.select(function(file){
-            //     if(replace){
-            //         img = currentImage;
-            //     } else {
-            //         img = currentImage = that.createImage(that.opts.loading);
-            //     }
-            //     that.render(file, img);
-            // });
         });
     },
 
@@ -184,7 +174,6 @@ F.prototype = {
             }
             event.stopPropagation();
         });
-
         return img;
     }
 };
