@@ -13,6 +13,9 @@ ImgEditor.prototype ={
         let maxWidth = parseInt(this.opts.maxWidth),
             quality = parseFloat(this.opts.quality);
         let url = URL.createObjectURL(file);
+        if(quality == 0.0){
+            quality = 1;
+        }
 
         //压缩质量与裁剪宽度
         let img = new Image();

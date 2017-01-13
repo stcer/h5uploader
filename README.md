@@ -11,7 +11,7 @@
 1.  初始化dom容器, 包括input_file, file_list
 1.  ImgPicker 监听 input_file.change() 事件
 1.  用户触发 input_file.click, 获得用户选择 files
-1.  渲染file到DOM(file_list), ImgRender压缩、裁剪file, 并上传
+1.  渲染file到DOM(file_list), imgEditor 压缩、裁剪file, 并上传
 1.  执行上传过程回调(如进度处理、结果渲染)
 
 # Example
