@@ -35,5 +35,13 @@ module.exports = {
         webkitURL : 'window.webkitURL',
         URL : 'window.URL',
         console : 'window.console'
-    }
+    },
+
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        })
+    ]
 };
