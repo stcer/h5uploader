@@ -35,10 +35,8 @@ export default function (url, image, options) {
     xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
-                // trigger event success
                 opts.onSuccess(xhr);
             } else {
-                // trigger event error
                 opts.onError(xhr);
             }
         }
@@ -48,7 +46,7 @@ export default function (url, image, options) {
     xhr.open(opts.method, url, true);
 
     let formData = new FormData();
-    formData.append(opts.fieldName, image, opts.fileName);
+    formData.append(opts.fieldName, image);
     if(opts.format == 'base64'){
         formData.append('fileName', opts.fileName) ;
     }

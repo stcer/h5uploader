@@ -1,49 +1,26 @@
-var webpack = require('webpack')
-
+const path = require('path')
 module.exports = {
-    entry: './index.js',
-
-    output: {
-        path: __dirname + '/dist',
-        filename: 'h5uploader.js'
+    mode: 'development',
+    devServer: {
+        host: '192.168.0.175',
+        contentBase: path.resolve(__dirname, 'dist')
     },
-
     module: {
-        loaders: [
+        rules: [
+            {
+                test: /\.js$/,
+                include: [
+                    path.resolve(__dirname, 'src')
+                ],
+                loader: 'babel-loader',
+                options: {
+                    presets: ["env"]
+                }
+            },
             {
                 test: /\.css$/,
-                loader: 'style!css'
-            },
-            {
-                // use babel-loader for *.js files
-                test: /\.js$/,
-                loader: 'babel',
-                // important: exclude files in node_modules
-                // otherwise it's going to be really slow!
-                exclude: /node_modules/
-            },
-            {
-                test: /\.scss$/,
-                loaders: ["style-loader", "css-loader", "sass-loader"]
+                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
             }
         ]
-    },
-
-    externals: {
-        jquery: 'window.$',
-        navigator : 'window.navigator',
-        webkitURL : 'window.webkitURL',
-        URL : 'window.URL',
-        console : 'window.console'
-    },
-
-    devtool : "source-map",
-
-    plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        })
-    ]
-};
+    }
+}
