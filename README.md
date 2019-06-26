@@ -53,6 +53,16 @@ transData | object | {} | 上传附属数据
 onUpload | function | null | 文件上传成功callback
 onSend | function | null | 文件上传前callback
 
+
+## method
+
+name | return | description
+------|---|------
+createImage(string src) | void | 设置上传图片
+clear() | void | 清除所有图片
+setImages(array img) | void | 批量设置图片
+selectFile() | void | 调用选择本地图片对话框
+
 ## 执行流程
 
 1.  初始化dom容器, 包括input_file, file_list

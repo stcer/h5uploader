@@ -8,9 +8,9 @@ import Img from "./Img.js";
 let F = function (name, images, container, options) {
     this.name = name;
     this.images = images;
-    this.curtImg = null;
-    this.list = null;
     this.container = container;
+    this.itemsWrap = null;
+    this.selectorWrap = null;
 
     this.opts = $.extend({
         mul: false,
@@ -21,6 +21,7 @@ let F = function (name, images, container, options) {
         mime: 'image/*',
         type: /image.(png|jpeg|gif|jpg)/,
         maxSize: 1024 * 1024 * 4,
+        maxItems: 12,
 
         // _upload
         loading: 'http://ui.jc001.cn/images/loading.gif',
@@ -28,6 +29,7 @@ let F = function (name, images, container, options) {
         fileName: 'media',
         dataFormat : 'file',
         transData: {},
+
         onUpload: function (src) {
         },
         onSend: function (F) {
@@ -51,59 +53,90 @@ let F = function (name, images, container, options) {
 F.prototype = {
     init: function () {
         this.container.addClass('h5_uploads');
-        this.container.append($('' +
-            '<div class="up_selector icon-plus2 glyphicon glyphicon-camera"></div>' +
-            '<div class="up_list"></div>' +
-            ''));
-        this.list = $('.up_list', this.container);
+        this.container.append($(`
+<div class="jH5Uploader">
+<div class="up_selector icon-plus2 glyphicon glyphicon-camera"></div>
+<div class="up_list"></div>
+</div>
+`
+        ));
+        this.itemsWrap = $('.up_list', this.container);
+        this.selectorWrap = $('.up_selector', this.container);
+        this.selectorWrap.click(() => {
+            this.selectFile()
+        });
 
-        let that = this;
-        let currentImage = false;
-        if (this.images) {
-            this.images.forEach(function(src){
-                if(src.length == 0){
-                    return;
-                }
-                let _img = currentImage = that.createImage(src);
-                _img.setValue(src);
-            });
+        this.setImages(this.images);
+    },
+
+    selectFile() {
+        if (!this._isAbleUpload()) {
+            return false;
         }
 
-        $('.up_selector', this.container).click(function () {
-            let replace = that.list.find('.up_item').size() > 0 && that.opts.mul == false;
-            if (replace) {
-                return false;
-            }
-
-            that.imgPicker.select(function (file) {
-                let img = that.createImage(that.opts.loading);
-                that._render(file, img);
-            });
+        this.imgPicker.select((file) => {
+            let img = this.createImage(this.opts.loading, true);
+            this._render(file, img);
         });
     },
 
-    _isCanAdd: function () {
-        return this.list.has('.up_item').size() == 0 || this.opts.mul == true;
+    setImages(images) {
+        this.clear();
+
+        if(!images) {
+            return;
+        }
+
+        images.forEach((src) => {
+            if(src.length === 0){
+                return;
+            }
+            this.createImage(src).setValue(src);
+        });
+    },
+
+    _getSize() {
+        return this.itemsWrap.find('.up_item').size();
+    },
+
+    _isAbleUpload() {
+        return this._isEmpty()
+            || this._isMulUpload() && this._getSize() < this.opts.maxItems;
+    },
+
+    _isMulUpload() {
+        return this.opts.mul === true;
+    },
+
+    _isBase64() {
+        return this.opts.dataFormat === 'base64';
+    },
+
+    _isEmpty() {
+        return this._getSize() === 0;
     },
 
     _render: function (file, img) {
-        let that = this;
         if((this.opts.maxWidth || this.opts.opacity)){
-            this.imgEditor.getResult(file, function (fileData, file) {
-                img.setUrl(that.opts.dataFormat == 'base64'? fileData : URL.createObjectURL(fileData));
-                that._upload(fileData, file, img);
+            this.imgEditor.getResult(file,  (fileData, file) => {
+                img.setUrl(this._isBase64()
+                    ? fileData
+                    : URL.createObjectURL(fileData)
+                );
+                this._upload(fileData, file, img);
             });
         } else {
             img.setUrl(URL.createObjectURL(file));
-            that._upload(file, file, img);
+            this._upload(file, file, img);
         }
     },
+
 
     _upload: function (data, file, img) {
         let self = this;
         let progress = img.progress;
         //let prefix = 'data:' + file.type + ";base64,";
-        data = this.opts.dataFormat == 'base64d' ? data.substr(data.indexOf(',') + 1)  : data;
+        data = this._isBase64() ? data.substr(data.indexOf(',') + 1)  : data;
 
         uploadFile(this.opts.upload, data, {
             fieldName : this.opts.fileName,
@@ -120,24 +153,24 @@ F.prototype = {
                 progress.val((loaded / total) * 100);
             },
 
-            onSuccess: function (xhr) {
+            onSuccess: (xhr) => {
                 console.log(xhr.responseText);
                 let response = eval("(" + xhr.responseText + ")");
-                if (response.code == 200) {
+                if (response.code === 200) {
                     progress.val(100);
                     progress.hide();
                     img.setValue(response.data.url);
                     self.opts.onUpload(response.data.url);
                 } else {
                     alert('上传失败, ' + response.message);
-                    img.remove();
+                    this._removeImg(img);
                 }
             },
 
-            onError: function (xhr) {
+            onError: (xhr) => {
                 alert('上传失败(' + xhr.status + ')');
-                img.remove();
-            },
+                this._removeImg(img);
+            } ,
 
             onSend: function (formData) {
                 self.opts.onSend(formData);
@@ -155,27 +188,53 @@ F.prototype = {
         return this.opts.mul ? this.name + '[]' : this.name;
     },
 
-    createImage: function (src) {
-        let that = this;
-        let name = this.getFieldName();
-        let img = new Img(name, src, this.list);
+    clear: function(){
+        this.itemsWrap.html('');
+        this._checkSelectorShow();
+    },
 
-        img.image.click(function () {
-            that.imgPicker.select(function (file) {
-                that._render(file, img);
+    createImage: function (src, isReady) {
+        if(!isReady && !this._isAbleUpload()){
+            this.clear()
+        }
+
+        let img = new Img(this.getFieldName(), src, this.itemsWrap, isReady);
+        img.image.click(() => {
+            this.imgPicker.select((file) => {
+                this._render(file, img);
             });
         });
 
-        img.deleteImg.click(function () {
-            img.remove();
-            if (that.isSetCover
-                && $('input[name=' + that.opts.coverFieldName + ']', that.list).size() == 0) {
-                let item = $('>:first-child', that.list);
-                $('input[type=hidden]', item).attr('name', that.opts.coverFieldName);
+        img.deleteImg.click((e) => {
+            e.stopPropagation();
+            this._removeImg(img);
+            if (this.isSetCover
+                && $(`input[name=${this.opts.coverFieldName}]`, this.itemsWrap).size() === 0)
+            {
+                let item = $('>:first-child', this.itemsWrap);
+                $('input[type=hidden]', item).attr('name', this.opts.coverFieldName);
             }
-            event.stopPropagation();
         });
+
+        if(this._isAbleUpload()){
+            this.selectorWrap.hide();
+        }
+
+        this._checkSelectorShow();
         return img;
+    },
+
+    _removeImg(img) {
+        img.remove();
+        this._checkSelectorShow();
+    },
+
+    _checkSelectorShow(){
+        if (this._isAbleUpload()) {
+           this.selectorWrap.show();
+        } else {
+            this.selectorWrap.hide();
+        }
     }
 };
 
