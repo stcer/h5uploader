@@ -11,6 +11,7 @@ let F = function (name, images, container, options) {
     this.container = container;
     this.itemsWrap = null;
     this.selectorWrap = null;
+    this.outerWrap = null;
 
     this.opts = $.extend({
         mul: false,
@@ -29,6 +30,7 @@ let F = function (name, images, container, options) {
         fileName: 'media',
         dataFormat : 'file',
         transData: {},
+        outerLink: [],
 
         onUpload: function (src) {
         },
@@ -52,21 +54,57 @@ let F = function (name, images, container, options) {
 
 F.prototype = {
     init: function () {
+        let outerArr = this.opts.outerLink;
+        let self = this;
+        let outer = '';
+        outerArr.forEach((item, index) => {
+            outer += `
+                <div class="box" data="${index}">
+                    <img src="${item}"/>
+                </div>
+            `
+        });
+
         this.container.addClass('h5_uploads');
         this.container.append($(`
-<div class="jH5Uploader">
-<div class="up_selector icon-plus2 glyphicon glyphicon-camera"></div>
-<div class="up_list"></div>
-</div>
-`
+            <div class="jH5Uploader">
+                <div class="up_selector icon-plus2 glyphicon glyphicon-camera"></div>
+                ${outer ? '<div class="up_selector icon-plus2 glyphicon glyphicon-th"></div>' : ''}
+                <div class="up_list"></div>
+            </div>
+            <div class="outer-links">
+                <div class="boxs">
+                    <div class="img-box">
+                        ${outer}
+                    </div>
+                </div>
+            </div>
+            `
         ));
         this.itemsWrap = $('.up_list', this.container);
-        this.selectorWrap = $('.up_selector', this.container);
+        this.selectorWrap = $('.glyphicon-camera', this.container);
+        this.outerWrap = $('.glyphicon-th', this.container);
         this.selectorWrap.click(() => {
             this.selectFile()
         });
+        this.outerWrap.click(() => {
+            this.outerFile()
+        });
+        $('.outer-links', this.container).click(() => {
+            this.outerFile(1)
+        });
+        $('.outer-links .box', this.container).click(function() {
+            let links = $('.outer-links .box', this.container);
+            links.removeClass('cur');
+            $(this).addClass('cur');
+            self.setImages([outerArr[links.index($(this))]]);
+        });
 
         this.setImages(this.images);
+    },
+
+    outerFile(out) {
+        $('.outer-links', this.container)[out ? 'fadeOut' : 'fadeIn']();
     },
 
     selectFile() {
