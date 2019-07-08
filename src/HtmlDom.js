@@ -10,11 +10,7 @@ HtmlDom.prototype = {
         let outerArr = this.outerArr;
         let outer = '';
         outerArr.forEach((item) => {
-            outer += `
-            <div class="up_link-box">
-                <img src="${item}"/>
-            </div>
-            `
+            outer += `<div class="up_link-box" style="background:url(${item}) no-repeat center; background-size:cover;"></div>`;
         });
 
         this.container.addClass('h5_uploads');
@@ -25,8 +21,9 @@ HtmlDom.prototype = {
             <div class="up_list"></div>
         </div>
         <div class="up_links-pop">
-            <div class="up_link-boxs">
-                <div class="up_link-imgs">${outer}</div>
+            <div class="up_links-boxs">
+                <div class="up_link-back">返回</div>
+                <div class="up_link-boxs">${outer}</div>
             </div>
         </div>
         `
