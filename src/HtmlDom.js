@@ -15,7 +15,7 @@ HtmlDom.prototype = {
 `
         ));
         this.itemsWrap = $('.up_list', this.container);
-        this.selectorWrap = $('.up_selector', this.container);
+        this.selectorWrap = $('.glyphicon-camera', this.container);
     },
 
     getItems() {

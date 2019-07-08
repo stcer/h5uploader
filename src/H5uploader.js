@@ -3,6 +3,7 @@ import ImgPicker from "./ImgPicker.js";
 import imgEditor from "./ImgEditor.js";
 import uploadFile from "./Uploader.js";
 import {HtmlDom} from "./HtmlDom";
+import {OuterLink} from "./OuterLink";
 
 // main class
 let F = function (name, images, container, options) {
@@ -27,6 +28,7 @@ let F = function (name, images, container, options) {
         fileName: 'media',
         dataFormat : 'file',
         transData: {},
+        outerLink: [],
 
         onUpload: function (src) {
         },
@@ -35,6 +37,8 @@ let F = function (name, images, container, options) {
     }, options);
 
     this.isSetCover = false;
+    
+    this.link = new OuterLink(container, this.opts.outerLink);
 
     this.imgPicker = new ImgPicker(container, {
         mul: this.opts.mul,
@@ -50,11 +54,26 @@ let F = function (name, images, container, options) {
 
 F.prototype = {
     init: function () {
+        let self = this;
+        let outerArr = this.opts.outerLink;
         this.dom.init()
         this.dom.getSelector().click(() => {
             this.selectFile()
         });
         this.setImages(this.images);
+
+        if (outerArr.length) {
+            this.link.init();
+            let imgBox = this.link.imgBox;
+            this.link.outerBtn.click(() => {
+                this.link.outerPop.fadeIn();
+            });
+            imgBox.click(function() {
+                imgBox.removeClass('cur');
+                $(this).addClass('cur');
+                self.setImages([outerArr[imgBox.index($(this))]]);
+            });
+        }
     },
 
     selectFile() {
