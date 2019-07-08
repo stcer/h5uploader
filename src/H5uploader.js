@@ -8,7 +8,6 @@ import {HtmlDom} from "./HtmlDom";
 let F = function (name, images, container, options) {
     this.name = name;
     this.images = images;
-    this.dom = new HtmlDom(container)
 
     this.opts = $.extend({
         mul: false,
@@ -27,6 +26,7 @@ let F = function (name, images, container, options) {
         fileName: 'media',
         dataFormat : 'file',
         transData: {},
+        outerLink: [],
 
         onUpload: function (src) {
         },
@@ -35,6 +35,8 @@ let F = function (name, images, container, options) {
     }, options);
 
     this.isSetCover = false;
+    
+    this.dom = new HtmlDom(container, this.opts.outerLink);
 
     this.imgPicker = new ImgPicker(container, {
         mul: this.opts.mul,
@@ -50,11 +52,22 @@ let F = function (name, images, container, options) {
 
 F.prototype = {
     init: function () {
+        let self = this;
         this.dom.init()
         this.dom.getSelector().click(() => {
             this.selectFile()
         });
+        this.dom.linksImgWrap.click(function() {
+            self.linksSelect($(this));
+        });
         this.setImages(this.images);
+    },
+
+    linksSelect(obj) {
+        let imgBox = this.dom.linksImgWrap;
+        imgBox.removeClass('cur');
+        obj.addClass('cur');
+        this.setImages([this.opts.outerLink[imgBox.index(obj)]]);
     },
 
     selectFile() {

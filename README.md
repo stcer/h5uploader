@@ -26,7 +26,14 @@
     // H5ImgUploader(name, values, container, options)
     var imgs = new H5ImgUploader('test', [], $("#test"), {
         mime : 'image/jpg',
-        upload : '/upload.php'
+        upload : '/upload.php',
+        outerLink: [
+            'http://f.hiphotos.baidu.com/image/h%3D300/sign=e6821d0a831001e9513c120f880f7b06/a71ea8d3fd1f4134d244519d2b1f95cad0c85ee5.jpg', 
+            'http://f.hiphotos.baidu.com/image/h%3D300/sign=0fca30c4b712c8fcabf3f0cdcc0292b4/8326cffc1e178a82c4403d44f803738da877e8d2.jpg', 
+            'http://f.hiphotos.baidu.com/image/h%3D300/sign=e6821d0a831001e9513c120f880f7b06/a71ea8d3fd1f4134d244519d2b1f95cad0c85ee5.jpg', 
+            'http://f.hiphotos.baidu.com/image/h%3D300/sign=0fca30c4b712c8fcabf3f0cdcc0292b4/8326cffc1e178a82c4403d44f803738da877e8d2.jpg', 
+            'http://f.hiphotos.baidu.com/image/h%3D300/sign=e6821d0a831001e9513c120f880f7b06/a71ea8d3fd1f4134d244519d2b1f95cad0c85ee5.jpg'
+        ]
     });
     imgs.init();
 </script>
@@ -52,6 +59,7 @@ dataFormat | string | file | 文件上传格式, 可选file与base64
 transData | object | {} | 上传附属数据
 onUpload | function | null | 文件上传成功callback
 onSend | function | null | 文件上传前callback
+outerLink | array | [] | 额外图片链接
 
 
 ## method
