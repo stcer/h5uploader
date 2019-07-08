@@ -11,7 +11,7 @@ HtmlDom.prototype = {
         let outer = '';
         outerArr.forEach((item) => {
             outer += `
-            <div class="show_link_box">
+            <div class="up_link-box">
                 <img src="${item}"/>
             </div>
             `
@@ -24,9 +24,9 @@ HtmlDom.prototype = {
             ${outerArr.length ? '<div class="up_links icon-plus2 glyphicon glyphicon-th"></div>' : '' }
             <div class="up_list"></div>
         </div>
-        <div class="outer-links">
-            <div class="boxs">
-                <div class="img-box">${outer}</div>
+        <div class="up_links-pop">
+            <div class="up_link-boxs">
+                <div class="up_link-imgs">${outer}</div>
             </div>
         </div>
         `
@@ -34,9 +34,9 @@ HtmlDom.prototype = {
         this.itemsWrap = $('.up_list', this.container);
         this.selectorWrap = $('.up_selector', this.container);
         this.linksWrap = $('.up_links', this.container);
-        this.linksImgWrap = $('.show_link_box', this.container);
+        this.linksImgWrap = $('.up_link-box', this.container);
 
-        let linkPop = $('.outer-links', this.container);
+        let linkPop = $('.up_links-pop', this.container);
         this.linksWrap.click(() => {
             linkPop.fadeIn();
         });
