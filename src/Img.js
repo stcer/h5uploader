@@ -11,11 +11,14 @@ let Img = function(name, url, container, isReady){
     container.append(item);
 
     this.root = item;
-    this.isReady = isReady;
     this.deleteImg = $('a', item);
     this.progress = $('progress', item);
     this.image = $('img', item);
     this.value = $('input', item);
+
+    if(isReady){
+        this.setValue(url)
+    }
 };
 
 Img.prototype = {

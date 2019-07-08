@@ -2,15 +2,13 @@
 import ImgPicker from "./ImgPicker.js";
 import imgEditor from "./ImgEditor.js";
 import uploadFile from "./Uploader.js";
-import Img from "./Img.js";
+import {HtmlDom} from "./HtmlDom";
 
 // main class
 let F = function (name, images, container, options) {
     this.name = name;
     this.images = images;
-    this.container = container;
-    this.itemsWrap = null;
-    this.selectorWrap = null;
+    this.dom = new HtmlDom(container)
 
     this.opts = $.extend({
         mul: false,
@@ -52,20 +50,10 @@ let F = function (name, images, container, options) {
 
 F.prototype = {
     init: function () {
-        this.container.addClass('h5_uploads');
-        this.container.append($(`
-<div class="jH5Uploader">
-<div class="up_selector icon-plus2 glyphicon glyphicon-camera"></div>
-<div class="up_list"></div>
-</div>
-`
-        ));
-        this.itemsWrap = $('.up_list', this.container);
-        this.selectorWrap = $('.up_selector', this.container);
-        this.selectorWrap.click(() => {
+        this.dom.init()
+        this.dom.getSelector().click(() => {
             this.selectFile()
         });
-
         this.setImages(this.images);
     },
 
@@ -75,8 +63,8 @@ F.prototype = {
         }
 
         this.imgPicker.select((file) => {
-            let img = this.createImage(this.opts.loading, true);
-            this._render(file, img);
+            let img = this.createImage(this.opts.loading);
+            this._saveAndRender(file, img);
         });
     },
 
@@ -96,11 +84,11 @@ F.prototype = {
     },
 
     _getSize() {
-        return this.itemsWrap.find('.up_item').size();
+        return this.dom.getItemSize();
     },
 
     _isAbleUpload() {
-        return this._isEmpty()
+        return this._getSize() === 0
             || this._isMulUpload() && this._getSize() < this.opts.maxItems;
     },
 
@@ -112,11 +100,7 @@ F.prototype = {
         return this.opts.dataFormat === 'base64';
     },
 
-    _isEmpty() {
-        return this._getSize() === 0;
-    },
-
-    _render: function (file, img) {
+    _saveAndRender: function (file, img) {
         if((this.opts.maxWidth || this.opts.opacity)){
             this.imgEditor.getResult(file,  (fileData, file) => {
                 img.setUrl(this._isBase64()
@@ -189,7 +173,7 @@ F.prototype = {
     },
 
     clear: function(){
-        this.itemsWrap.html('');
+        this.dom.clearItems();
         this._checkSelectorShow();
     },
 
@@ -198,27 +182,20 @@ F.prototype = {
             this.clear()
         }
 
-        let img = new Img(this.getFieldName(), src, this.itemsWrap, isReady);
+        let img = this.dom.createImg(this.getFieldName(), src, isReady);
         img.image.click(() => {
             this.imgPicker.select((file) => {
-                this._render(file, img);
+                this._saveAndRender(file, img);
             });
         });
 
         img.deleteImg.click((e) => {
             e.stopPropagation();
             this._removeImg(img);
-            if (this.isSetCover
-                && $(`input[name=${this.opts.coverFieldName}]`, this.itemsWrap).size() === 0)
-            {
-                let item = $('>:first-child', this.itemsWrap);
-                $('input[type=hidden]', item).attr('name', this.opts.coverFieldName);
+            if (this.isSetCover){
+                this.dom.changeCoverImg(this.opts.coverFieldName)
             }
         });
-
-        if(this._isAbleUpload()){
-            this.selectorWrap.hide();
-        }
 
         this._checkSelectorShow();
         return img;
@@ -231,9 +208,9 @@ F.prototype = {
 
     _checkSelectorShow(){
         if (this._isAbleUpload()) {
-           this.selectorWrap.show();
+           this.dom.selectorShow();
         } else {
-            this.selectorWrap.hide();
+            this.dom.selectorHide();
         }
     }
 };
