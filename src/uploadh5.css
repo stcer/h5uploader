@@ -7,7 +7,7 @@
 }
 .h5_uploads { zoom: 1; }
 
-.h5_uploads .up_selector{
+.h5_uploads .icon-plus2{
     float: left;
     width:80px;
     height:80px; margin:5px;
@@ -65,9 +65,9 @@
     position:absolute; width:100%; top:50%; left:50%; background:#fff;
     padding:10px 0 10px 10px; transform:translate3d(-50%,-50%,0);
 }
-.outer-links .img-box .box {
+.outer-links .img-box .show_link_box {
     display:inline-block; width:80px; height:80px; margin:10px; border:1px solid #f0f0f0; cursor:pointer;
     text-align:center; overflow:hidden;
 }
-.outer-links .img-box .box img{max-width:100%;}
+.outer-links .img-box .show_link_box img{max-width:100%;}
 .outer-links .img-box .cur{outline:rgb(62, 147, 255) solid 2px; transition:all 0.2s ease 0s;}
