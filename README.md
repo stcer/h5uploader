@@ -53,7 +53,7 @@ coverFieldName | string | image | 封面图像隐藏域name
 mime | string | image/* | 允许上传文件的mime类型
 type | string |   | 允许上传文件的正则pattern
 maxSize | int | 1024 * 1024 * 4 | 允许文件的最大尺寸(byte)
-upload | string | /upload/save |  服务器上传地址
+upload | string | /upload/save |  服务器上传地址, success: {code: 200, data: {url: string}}, error: {message: string}
 fileName | string | media | 上传文件域name
 dataFormat | string | file | 文件上传格式, 可选file与base64
 transData | object | {} | 上传附属数据
