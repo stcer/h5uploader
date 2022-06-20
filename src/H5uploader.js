@@ -27,6 +27,7 @@ let F = function (name, images, container, options) {
         dataFormat : 'file',
         transData: {},
         outerLink: [],
+        uploadHandleHtml: null,
 
         onUpload: function (src) {
         },
@@ -35,8 +36,8 @@ let F = function (name, images, container, options) {
     }, options);
 
     this.isSetCover = false;
-    
-    this.dom = new HtmlDom(container, this.opts.outerLink);
+
+    this.dom = new HtmlDom(container, this.opts.outerLink, this.opts.uploadHandleHtml);
 
     this.imgPicker = new ImgPicker(container, {
         mul: this.opts.mul,
@@ -156,8 +157,12 @@ F.prototype = {
                 if (response.code === 200) {
                     progress.val(100);
                     progress.hide();
-                    img.setValue(response.data.url);
-                    self.opts.onUpload(response.data.url);
+
+                    if (self.opts.onUpload(response.data.url)) {
+                        this._removeImg(img);
+                    } else {
+                        img.setValue(response.data.url);
+                    }
                 } else {
                     alert('上传失败, ' + response.message);
                     this._removeImg(img);

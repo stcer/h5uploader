@@ -1,8 +1,9 @@
 import Img from "./Img";
 
-export function HtmlDom(container, outerArr) {
+export function HtmlDom(container, outerArr, uploadHandleHtml) {
     this.container = container;
     this.outerArr = outerArr;
+    this.uploadHandleHtml = uploadHandleHtml;
 }
 
 HtmlDom.prototype = {
@@ -16,7 +17,7 @@ HtmlDom.prototype = {
         this.container.addClass('h5_uploads');
         this.container.append($(`
         <div class="jH5Uploader">
-            <div class="up_selector icon-plus2 glyphicon glyphicon-camera"></div>
+            <div class="up_selector">${this.uploadHandleHtml || '<div class="up_selector icon-plus2 glyphicon glyphicon-camera"></div>'}</div>
             ${outerArr.length ? '<div class="up_links icon-plus2 glyphicon glyphicon-th"></div>' : '' }
             <div class="up_list"></div>
         </div>

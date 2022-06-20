@@ -43,33 +43,33 @@
 ```
 
 ## Options
-name | type | default | description
-------|-----|---------|----
-maxWidth | int | 0 | 允许图像文件的最大宽度, 超过此宽度，将被压缩到maxWidth后上传, 0不限制
-quality | int | null | 图像质量 取值0.0-1.0之间, 不设置将不压缩
-mul | bool | false | 是否允许多图上传
-setCoverField | bool | true | 多图上传时允许封面图像
-coverFieldName | string | image | 封面图像隐藏域name
-mime | string | image/* | 允许上传文件的mime类型
-type | string |   | 允许上传文件的正则pattern
-maxSize | int | 1024 * 1024 * 4 | 允许文件的最大尺寸(byte)
-upload | string | /upload/save |  服务器上传地址, success: {code: 200, data: {url: string}}, error: {message: string}
-fileName | string | media | 上传文件域name
-dataFormat | string | file | 文件上传格式, 可选file与base64
-transData | object | {} | 上传附属数据
-onUpload | function | null | 文件上传成功callback
-onSend | function | null | 文件上传前callback
-outerLink | array | [] | 额外图片链接
-
+| name             | type     | default         | description                                                                  |
+|------------------|----------|-----------------|------------------------------------------------------------------------------|
+| maxWidth         | int      | 0               | 允许图像文件的最大宽度, 超过此宽度，将被压缩到maxWidth后上传, 0不限制                                    |
+| quality          | int      | null            | 图像质量 取值0.0-1.0之间, 不设置将不压缩                                                    |
+| mul              | bool     | false           | 是否允许多图上传                                                                     |
+| setCoverField    | bool     | true            | 多图上传时允许封面图像                                                                  |
+| coverFieldName   | string   | image           | 封面图像隐藏域name                                                                  |
+| mime             | string   | image/*         | 允许上传文件的mime类型                                                                |
+| type             | string   |                 | 允许上传文件的正则pattern                                                             |
+| maxSize          | int      | 1024 * 1024 * 4 | 允许文件的最大尺寸(byte)                                                              |
+| upload           | string   | /upload/save    | 服务器上传地址, success: {code: 200, data: {url: string}}, error: {message: string} |
+| fileName         | string   | media           | 上传文件域name                                                                    |
+| dataFormat       | string   | file            | 文件上传格式, 可选file与base64                                                        |
+| transData        | object   | {}              | 上传附属数据                                                                       |
+| onUpload         | function | null            | 文件上传成功callback                                                               |
+| onSend           | function | null            | 文件上传前callback                                                                |
+| outerLink        | array    | []              | 额外图片链接                                                                       |
+| uploadHtmlHandle | string   | null            | 上传handle html                                                                |
 
 ## method
 
-name | return | description
-------|---|------
-createImage(string src) | void | 设置上传图片
-clear() | void | 清除所有图片
-setImages(array img) | void | 批量设置图片
-selectFile() | void | 调用选择本地图片对话框
+| name                    | return | description |
+|-------------------------|--------|-------------|
+| createImage(string src) | void   | 设置上传图片      |
+| clear()                 | void   | 清除所有图片      |
+| setImages(array img)    | void   | 批量设置图片      |
+| selectFile()            | void   | 调用选择本地图片对话框 |
 
 ## 执行流程
 
