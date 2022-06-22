@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <title>H5 upload demo</title>
+    <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+<div id="test"></div>
+<div id="clear">Clear</div>
+
+<hr style="display: block; clear: both" />
+<div id="test_mul"></div>
+<script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="./h5uploader.js"></script>
+
+<script>
+    var imgs = new H5ImgUploader('test', [
+        // 'http://img3.jc001.cn/img/979/716979/1503/155506800804dbd_s.jpg'
+    ], $("#test"), {
+        mul : false,
+        mime : 'image/jpg',
+        opacity: 0.9,
+        maxWidth: 600,
+        dataFormat: 'base64',
+        upload : '/upload.php',
+        uploadHandleHtml: '<button>上传1</button>'
+    });
+    imgs.init();
+    // imgs.createImage('http://img3.jc001.cn/img/979/716979/1503/155506800804dbd_s.jpg')
+
+    $(function() {
+        $('#clear').click(function () {
+            imgs.clear()
+        })
+    })
+
+    var imgMul = new H5ImgUploader('testMul', [
+        'http://img3.jc001.cn/img/979/716979/1503/155506800804dbd_s.jpg',
+        'http://img3.jc001.cn/img/979/716979/1503/155506800804dbd_s.jpg',
+    ], $("#test_mul"), {
+        mul : true,
+        mime : 'image/jpg',
+        opacity: 0.9,
+        maxWidth: 600,
+        dataFormat: 'base64',
+        upload : '/upload.php',
+    });
+    imgMul.init();
+</script>
+
+</body>
+</html>

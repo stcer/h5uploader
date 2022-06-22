@@ -17,7 +17,10 @@ HtmlDom.prototype = {
         this.container.addClass('h5_uploads');
         this.container.append($(`
         <div class="jH5Uploader">
-            <div class="up_selector">${this.uploadHandleHtml || '<div class="up_selector icon-plus2 glyphicon glyphicon-camera"></div>'}</div>
+            ${this.uploadHandleHtml 
+                ? '<div class="up_selector">' + this.uploadHandleHtml + '</div>' 
+                : '<div class="up_selector icon-plus2 glyphicon glyphicon-camera"></div>'
+            }
             ${outerArr.length ? '<div class="up_links icon-plus2 glyphicon glyphicon-th"></div>' : '' }
             <div class="up_list"></div>
         </div>
